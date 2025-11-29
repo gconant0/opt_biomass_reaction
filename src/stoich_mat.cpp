@@ -178,7 +178,7 @@ Reaction_matrix::Reaction_matrix()
 	null_space_span=0;
 	
 	trans=new char;
-#ifdef ___LOCAL_BLAS___
+#if 1
 	fortran_cols=new long int;
 	fortran_rows=new long int;
 	nrhs=new long int;
@@ -214,7 +214,7 @@ Reaction_matrix::Reaction_matrix(string  infile)
     
     trans=new char;
     
-#ifdef ___LOCAL_BLAS___
+#if 1
     fortran_cols=new long int;
     fortran_rows=new long int;
     nrhs=new long int;
@@ -256,7 +256,7 @@ Reaction_matrix::Reaction_matrix(std::istream& datass)
     
     trans=new char;
     
-#ifdef ___LOCAL_BLAS___
+#if 1
     fortran_cols=new long int;
     fortran_rows=new long int;
     nrhs=new long int;
@@ -712,7 +712,7 @@ void Reaction_matrix::compute_ortho_basis()
 	*trans='A';
 	
 	*lwork=10.0*(*fortran_rows)*(*fortran_rows) +4*(*fortran_rows);
-#ifdef ___LOCAL_BLAS___
+#if 1
 	iwork = new long int [8*(*fortran_rows)];
 #else
 	iwork = new __CLPK_integer [8*(*fortran_rows)];
@@ -1002,7 +1002,7 @@ double Space_compare::do_comparison (Reaction_matrix *full_matrix, Reaction_matr
 		//cblas_dgemm(CblasColMajor,CblasTrans, CblasNoTrans, rows, cols, k, alpha, fortran_matrix, k, space_vector, 
 		//			k, beta, soln_vec, rows);
 		
-#ifdef ___LOCAL_BLAS___
+#if 1
 		transa='N';
 		transb='N';
 		l =1;
@@ -1017,7 +1017,7 @@ double Space_compare::do_comparison (Reaction_matrix *full_matrix, Reaction_matr
 		
 		proj_vec=new double[reduced_matrix->get_num_reactions()];
 	
-#if ___LOCAL_BLAS___
+#if 1
 		transa='N';
 		transb='N';
 		rows=reduced_matrix->get_num_reactions();

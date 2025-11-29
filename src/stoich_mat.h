@@ -7,14 +7,7 @@
 #include "gen_dna_funcs.h"
 #include <list>
 
-#ifdef ___LOCAL_BLAS___
 #include "liblapack.h"
-#else
-extern "C" {
-#include "cblas.h"
-#include "clapack.h"
-}
-#endif
 
 #ifndef ___STOICH_MAT_H___
 #define ___STOICH_MAT_H___
@@ -58,11 +51,7 @@ class Reaction_matrix
 {
 public:
 	int dim_null_space;
-#ifdef ___LOCAL_BLAS___
 	long int *nrhs, *fortran_cols, *fortran_rows, *info, *lwork, *pivots, *iwork;
-#else
-	__CLPK_integer *nrhs, *fortran_cols, *fortran_rows, *info, *lwork, *pivots, *iwork;
-#endif
 	char *trans;
 	double *fortran_matrix, *sing_vals, *u_mat, *v_mat,  *work,
 	**null_space_span;
