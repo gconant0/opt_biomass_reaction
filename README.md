@@ -6,3 +6,13 @@ Usage: opt_biomass_rxn <matrix file> <boundary file> Biomass_Rxn_Name ((constrai
 If -sko is specified, all single knockouts are made and if "filename" is given, the results of this analysis are stored to that file.
 
 The code depends on the GNU Linear programming toolkit and LAPACK: https://www.gnu.org/software/glpk/.
+
+To install
+
+git clone https://github.com/gconant0/opt_biomass_reaction
+
+cd opt_biomass_reaction
+
+perl ./configure
+
+make
