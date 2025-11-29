@@ -142,7 +142,7 @@ if($lapack_installed == 0) {
 	exit();
 }
 
-
+open(WRITEMAKE, ">src/Makefile") or die;
 
 print WRITEMAKE "#Makefile for opt_biomass_rxn\n";
 print WRITEMAKE "#G. Conant, 11/29/25\n\n";
@@ -151,7 +151,8 @@ print WRITEMAKE "CC = $CC\n";
 
 print WRITEMAKE "O = o\nSRC_DIR = ./\n";
 
-print WRITEMAKE "CFLAGS = -DGCC_COMPILE\n"
+print WRITEMAKE "CFLAGS = -DGCC_COMPILE \n";
+print WRITEMAKE "INCLUDE = -I.\n";
 print WRITEMAKE "OPTIM_SPEED = -O3\nOPTIM_SIZE = -O1\nMATH_LIB = -lm\n";
 if ($lapack_version eq "") {
     print WRITEMAKE "LAPACK_LIB = -llapack\nBLAS_LIB = -lblas\n";
@@ -166,14 +167,14 @@ print WRITEMAKE "GLPK_LIB = -lglpk\n";
 
 print WRITEMAKE "all:  opt_biomass_rxn\n";
 
-print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.$(O) stoich_mat.$(O)  lin_program.$(O)  gen_dna_funcs.$(O) \n";
+print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.\$(O) stoich_mat.\$(O)  lin_program.\$(O)  gen_dna_funcs.\$(O) \n";
 
 
-print WRITEMAKE "opt_biomass_rxn: $(OPT_BIOMASS_RXN_OBJS\n";
-print WRITEMAKE "\t$(CC) $(LINUX_BUILD)  $(LIBRARY_DIR)  -o ../opt_biomass_rxn $(OPTIONS) $(OPT_BIOMASS_RXN_OBJS)  $(MATH_LIB)   $(GLPK_LIB)  $(LAPACK_LIB)\n";
+print WRITEMAKE "opt_biomass_rxn: \$(OPT_BIOMASS_RXN_OBJS)\n";
+print WRITEMAKE "\t\$(CC) \$(LINUX_BUILD)  \$(LIBRARY_DIR)  -o ../opt_biomass_rxn \$(OPTIONS) \$(OPT_BIOMASS_RXN_OBJS)  \$(MATH_LIB)   \$(GLPK_LIB)  \$(LAPACK_LIB) \$(BLAS_LIB)\n";
 
 
- 
+print WRITEMAKE "%.o: %.cpp\n";
 print WRITEMAKE "\t\$(CC)  \$(OPTIONS) \$(OPTIM_SPEED) -c \$<\n";
 
 
@@ -191,7 +192,7 @@ print WRITEMAKE "default: all\n";
     print WRITEMAKE "all:  \n";
     print WRITEMAKE "\tcd src;  make\n";
 
-}
+
 
 
 
