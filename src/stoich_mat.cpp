@@ -179,11 +179,11 @@ Reaction_matrix::Reaction_matrix()
 	
 	trans=new char;
 #if 1
-	fortran_cols=new long int;
-	fortran_rows=new long int;
-	nrhs=new long int;
-	lwork=new long int;
-	info=new long int;
+	fortran_cols=new int;
+	fortran_rows=new int;
+	nrhs=new int;
+	lwork=new int;
+	info=new  int;
 #else
 	fortran_cols=new __CLPK_integer;
 	fortran_rows=new __CLPK_integer;
@@ -215,11 +215,11 @@ Reaction_matrix::Reaction_matrix(string  infile)
     trans=new char;
     
 #if 1
-    fortran_cols=new long int;
-    fortran_rows=new long int;
-    nrhs=new long int;
-    lwork=new long int;
-    info=new long int;
+    fortran_cols=new int;
+    fortran_rows=new int;
+    nrhs=new int;
+    lwork=new int;
+    info=new int;
 #else
     fortran_cols=new __CLPK_integer;
     fortran_rows=new __CLPK_integer;
@@ -257,11 +257,11 @@ Reaction_matrix::Reaction_matrix(std::istream& datass)
     trans=new char;
     
 #if 1
-    fortran_cols=new long int;
-    fortran_rows=new long int;
-    nrhs=new long int;
-    lwork=new long int;
-    info=new long int;
+    fortran_cols=new int;
+    fortran_rows=new  int;
+    nrhs=new int;
+    lwork=new  int;
+    info=new int;
 #else
     fortran_cols=new __CLPK_integer;
     fortran_rows=new __CLPK_integer;

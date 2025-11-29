@@ -51,7 +51,7 @@ class Reaction_matrix
 {
 public:
 	int dim_null_space;
-	long int *nrhs, *fortran_cols, *fortran_rows, *info, *lwork, *pivots, *iwork;
+	int *nrhs, *fortran_cols, *fortran_rows, *info, *lwork, *pivots, *iwork;
 	char *trans;
 	double *fortran_matrix, *sing_vals, *u_mat, *v_mat,  *work,
 	**null_space_span;
@@ -89,7 +89,7 @@ protected:
 class Space_compare {
 public:
 	int cnt_preclude;
-	long int *fortran_cols, *fortran_rows, *nrhs, *info, *lwork;
+	int *fortran_cols, *fortran_rows, *nrhs, *info, *lwork;
 	char *trans;
 	double *fortran_matrix, *fortran_vecs, *work;
 	
