@@ -713,7 +713,7 @@ void Reaction_matrix::compute_ortho_basis()
 	
 	*lwork=10.0*(*fortran_rows)*(*fortran_rows) +4*(*fortran_rows);
 #if 1
-	iwork = new long int [8*(*fortran_rows)];
+	iwork = new  int [8*(*fortran_rows)];
 #else
 	iwork = new __CLPK_integer [8*(*fortran_rows)];
 #endif
@@ -943,11 +943,11 @@ Reaction_matrix::~Reaction_matrix()
 Space_compare::Space_compare()
 {
 	trans=new char;
-	fortran_cols= new long int;
-	fortran_rows= new long int;
-	nrhs=new long int;
-	info=new long int;
-	lwork=new long int;
+	fortran_cols= new int;
+	fortran_rows= new int;
+	nrhs=new int;
+	info=new  int;
+	lwork=new int;
 	
 	fortran_matrix=fortran_vecs=work=0;
 }
@@ -955,7 +955,7 @@ Space_compare::Space_compare()
 double Space_compare::do_comparison (Reaction_matrix *full_matrix, Reaction_matrix *reduced_matrix)
 {
 	int i, j, start;
-	long int k, rows, cols, l;
+	int k, rows, cols, l;
 	char transa ='N', transb='N';
 	double *soln_vec, *space_vector, alpha, beta, len, *proj_vec, sqr, retval=0;
 	bool all_zero;
