@@ -1,4 +1,3 @@
-#include "linked_list.cpp"
 #include "stoich_mat.h"
 #include <string>
 #include <algorithm>
@@ -178,19 +177,13 @@ Reaction_matrix::Reaction_matrix()
 	null_space_span=0;
 	
 	trans=new char;
-#if 1
+
 	fortran_cols=new int;
 	fortran_rows=new int;
 	nrhs=new int;
 	lwork=new int;
-	info=new  int;
-#else
-	fortran_cols=new __CLPK_integer;
-	fortran_rows=new __CLPK_integer;
-	nrhs=new __CLPK_integer;
-	lwork=new __CLPK_integer;
-	info=new __CLPK_integer;
-#endif
+	info=new int;
+
 	internal_data=false;
 	omit_size=0;
 }
@@ -214,19 +207,12 @@ Reaction_matrix::Reaction_matrix(string  infile)
     
     trans=new char;
     
-#if 1
     fortran_cols=new int;
     fortran_rows=new int;
     nrhs=new int;
     lwork=new int;
     info=new int;
-#else
-    fortran_cols=new __CLPK_integer;
-    fortran_rows=new __CLPK_integer;
-    nrhs=new __CLPK_integer;
-    lwork=new __CLPK_integer;
-    info=new __CLPK_integer;
-#endif
+
     internal_data=true;
     omit_reaction=-1;
     omit_size=0;
@@ -256,19 +242,12 @@ Reaction_matrix::Reaction_matrix(std::istream& datass)
     
     trans=new char;
     
-#if 1
+
     fortran_cols=new int;
-    fortran_rows=new  int;
+    fortran_rows=new int;
     nrhs=new int;
-    lwork=new  int;
+    lwork=new int;
     info=new int;
-#else
-    fortran_cols=new __CLPK_integer;
-    fortran_rows=new __CLPK_integer;
-    nrhs=new __CLPK_integer;
-    lwork=new __CLPK_integer;
-    info=new __CLPK_integer;
-#endif
     internal_data=true;
     omit_reaction=-1;
     omit_size=0;
@@ -288,7 +267,6 @@ void Reaction_matrix::read_reaction_matrix(std::istream& fin)
     char dump;
     string line, new_name;
     bool found;
-    //ifstream fin;
     Metabolite a_metabolite, *my_metabolite, *new_metabolite;
     Reaction *a_reaction;
     std:list<double> react_stoich, prod_stoich;
@@ -712,11 +690,8 @@ void Reaction_matrix::compute_ortho_basis()
 	*trans='A';
 	
 	*lwork=10.0*(*fortran_rows)*(*fortran_rows) +4*(*fortran_rows);
-#if 1
-	iwork = new  int [8*(*fortran_rows)];
-#else
-	iwork = new __CLPK_integer [8*(*fortran_rows)];
-#endif
+	iwork = new int [8*(*fortran_rows)];
+
 	work=new double[*lwork];
 	
     cout<<"Making fortran_matrix\n";
@@ -946,7 +921,7 @@ Space_compare::Space_compare()
 	fortran_cols= new int;
 	fortran_rows= new int;
 	nrhs=new int;
-	info=new  int;
+	info=new int;
 	lwork=new int;
 	
 	fortran_matrix=fortran_vecs=work=0;
@@ -1002,22 +977,19 @@ double Space_compare::do_comparison (Reaction_matrix *full_matrix, Reaction_matr
 		//cblas_dgemm(CblasColMajor,CblasTrans, CblasNoTrans, rows, cols, k, alpha, fortran_matrix, k, space_vector, 
 		//			k, beta, soln_vec, rows);
 		
-#if 1
+
 		transa='N';
 		transb='N';
 		l =1;
 		dgemm_ (&transa, &transb, &rows, &cols, &cols, &alpha, fortran_matrix, &k, space_vector, &k, &beta, soln_vec, &rows, &l, &l);	
-#else
-		cblas_dgemm(CblasColMajor,CblasTrans, CblasNoTrans, rows, cols, k, alpha, fortran_matrix, k, space_vector, 
-					k, beta, soln_vec, rows);
-#endif	
+
 		//cout<<"Combination to project vector to reduced space\n";
 		//for(i=0; i<reduced_matrix->dim_null_space; i++)
 		//	cout<<soln_vec[i]<<endl;
 		
 		proj_vec=new double[reduced_matrix->get_num_reactions()];
 	
-#if 1
+
 		transa='N';
 		transb='N';
 		rows=reduced_matrix->get_num_reactions();
@@ -1025,10 +997,7 @@ double Space_compare::do_comparison (Reaction_matrix *full_matrix, Reaction_matr
 		k=reduced_matrix->dim_null_space;
 		l=1;
 		dgemm_ (&transa, &transb, &rows, &cols, &k, &alpha, fortran_matrix, &rows, soln_vec, &k, &beta, proj_vec, &rows, &l, &l);
-#else
-		cblas_dgemm(CblasColMajor, CblasNoTrans, CblasNoTrans, reduced_matrix->get_num_reactions(), 1, reduced_matrix->dim_null_space,
-					alpha, fortran_matrix, reduced_matrix->get_num_reactions(), soln_vec, reduced_matrix->dim_null_space, beta, proj_vec, reduced_matrix->get_num_reactions());
-#endif	
+
 		//cout<<"Vector projected to reduced space\n";
 		//for(i=0; i<reduced_matrix->get_num_reactions(); i++)
 		//	cout<<proj_vec[i]<<endl;

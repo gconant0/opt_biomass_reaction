@@ -6,8 +6,8 @@
 #include <map>
 #include "gen_dna_funcs.h"
 #include <list>
-
 #include "liblapack.h"
+
 
 #ifndef ___STOICH_MAT_H___
 #define ___STOICH_MAT_H___
