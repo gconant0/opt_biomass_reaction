@@ -16,3 +16,10 @@ cd opt_biomass_reaction
 perl ./configure
 
 make
+
+
+If you want to enable plotting from the program use:
+
+perl ./configure plot
+
+make
