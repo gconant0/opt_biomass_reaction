@@ -2,12 +2,63 @@
 
 use strict;
 
-my($i, $plot_path, $parallel, %paths, $version, $cc, $CC, $make_daemon, $lapack_installed, $lapack_version, $blas_version, $plot_version, $cgi_installed, $boost_installed, @out, $myloc, $j);
+my($i, $plot_path, $parallel, %paths, $plotlib_installed, $version, $cc, $CC, $make_daemon, $lapack_installed, $lapack_version, $blas_version, $plot_version, $cgi_installed, $boost_installed, @out, $myloc, $j);
 
 $lapack_installed=0;
 $boost_installed=0;
 $plot_path ="";
 
+$plotlib_installed=0;
+$plot_version="";
+
+if ($ARGV[0] =~ /plot/) {
+    
+    if((glob("/usr/lib/libplot*")) ) {
+        $plotlib_installed=1;
+
+        @out=`ls /usr/lib/libplot*`;
+        for($i=0; $i<@out; $i++) {
+            if ($out[$i] =~ /(libplot\.so\.\d)/) {
+                $plot_version=$1;
+            }
+        }
+    }
+    
+    if((glob("/usr/local/lib/libplot*")) ) {
+        $plotlib_installed=1;
+
+        @out=`ls /usr/local/lib/libplot*`;
+        for($i=0; $i<@out; $i++) {
+            if ($out[$i] =~ /(libplot\.so\.\d)/) {
+                $plot_version=$1;
+            }
+        }
+    }
+
+    if((glob("/lib/libplot*")) ) {
+        $plotlib_installed=1;
+
+        @out=`ls /lib/libplot*`;
+        for($i=0; $i<@out; $i++) {
+            if ($out[$i] =~ /(libplot\.so\.\d)/) {
+                $plot_version=$1;
+            }
+        }
+    }
+    
+    if((glob("/usr/lib/x86_64-linux-gnu/libplot*")) ) {
+        $plotlib_installed=1;
+
+        @out=`ls /usr/lib/x86_64-linux-gnu/libplot*`;
+        for($i=0; $i<@out; $i++) {
+            if ($out[$i] =~ /(libplot\.so\.\d)/) {
+                $plot_version=$1;
+            }
+        }
+    }
+
+    
+}
 
 
 if (-e "src/Makefile") {`rm src/Makefile`}
@@ -161,17 +212,33 @@ else {
     print WRITEMAKE "LAPACK_LIB = -l:", $lapack_version, "\nBLAS_LIB = -l:", $blas_version, "\n";
 }
 
+if ($plotlib_installed ==1) {
+    if ($plot_version eq "") {
+        print WRITEMAKE "PLOT_LIB = -l:", $plot_version, "\n";
+    }
+    else {
+        print WRITEMAKE "PLOT_LIB = -lplot\n";
+    }
+}
 
 print WRITEMAKE "OPTIONS = \$(CFLAGS) \$(INCLUDE)\n";
 print WRITEMAKE "GLPK_LIB = -lglpk\n";
 
 print WRITEMAKE "all:  opt_biomass_rxn\n";
 
-print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.\$(O) stoich_mat.\$(O)  lin_program.\$(O)  gen_dna_funcs.\$(O) \n";
+print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.\$(O) stoich_mat.\$(O)  lin_program.\$(O)  gen_dna_funcs.\$(O) "
+if ($plotlib_installed ==1) {
+    print WRITEMAKE " plot_fba.\$(O) ";
+}
+print WRITEMAKE "\n";
 
 
 print WRITEMAKE "opt_biomass_rxn: \$(OPT_BIOMASS_RXN_OBJS)\n";
-print WRITEMAKE "\t\$(CC) \$(LINUX_BUILD)  \$(LIBRARY_DIR)  -o ../opt_biomass_rxn \$(OPTIONS) \$(OPT_BIOMASS_RXN_OBJS)  \$(MATH_LIB)   \$(GLPK_LIB)  \$(LAPACK_LIB) \$(BLAS_LIB)\n";
+print WRITEMAKE "\t\$(CC) \$(LINUX_BUILD)  \$(LIBRARY_DIR)  -o ../opt_biomass_rxn \$(OPTIONS) \$(OPT_BIOMASS_RXN_OBJS)  \$(MATH_LIB)   \$(GLPK_LIB)  \$(LAPACK_LIB) \$(BLAS_LIB)";
+if ($plotlib_installed ==1) {
+    print WRITEMAKE " \$(PLOT_LIB) ";
+}
+print WRITEMAKE "\n";
 
 
 print WRITEMAKE "%.o: %.cpp\n";
