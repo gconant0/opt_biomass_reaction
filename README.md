@@ -7,6 +7,8 @@ If -sko is specified, all single knockouts are made and if "filename" is given, 
 
 The code depends on the GNU Linear programming toolkit and LAPACK: https://www.gnu.org/software/glpk/.
 
+If you want the optional plotting functions (see below), you will also need to install the GNU plotutils: https://www.gnu.org/software/plotutils/
+
 To install
 
 git clone https://github.com/gconant0/opt_biomass_reaction
