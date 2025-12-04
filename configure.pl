@@ -226,7 +226,7 @@ print WRITEMAKE "GLPK_LIB = -lglpk\n";
 
 print WRITEMAKE "all:  opt_biomass_rxn\n";
 
-print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.\$(O) stoich_mat.\$(O)  lin_program.\$(O)  gen_dna_funcs.\$(O) "
+print WRITEMAKE "OPT_BIOMASS_RXN_OBJS = opt_biomass_rxn.\$(O) stoich_mat.\$(O)  lin_program.\$(O)  gen_dna_funcs.\$(O) ";
 if ($plotlib_installed ==1) {
     print WRITEMAKE " plot_fba.\$(O) ";
 }
