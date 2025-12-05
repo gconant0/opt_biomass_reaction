@@ -55,7 +55,7 @@ int main (int argc, char **argv) {
                         double_kd=true;
                         
                         outfile=argv[i];
-                        outfile=outfile.substr(5, outfile.length);
+                        outfile=outfile.substr(5, outfile.length());
                     }
                     if ((argv[i][1] == 'p') || (argv[i][1] == 'P')) {
                         do_plot=true;
