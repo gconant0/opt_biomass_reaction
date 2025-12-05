@@ -48,7 +48,7 @@ int main (int argc, char **argv) {
                         else  single_ko=true;
                         
                         outfile=argv[i];
-                        outfile=outfile.substr(5, outfile.length);
+                        outfile=outfile.substr(5, outfile.length());
                     }
                     
                     if ((argv[i][1] == 'd') || (argv[i][1] == 'D')) {
