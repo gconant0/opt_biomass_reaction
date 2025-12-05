@@ -20,7 +20,7 @@ int main (int argc, char **argv) {
 	ofstream fout;
     stringstream ss;
 	bool extra_bound=false, single_kd=false, single_ko=false, double_kd=false,
-		single_print=false, lower_bound=false, do_knockout=false, *ran_rxn, same, match;
+		lower_bound=false, do_knockout=false, *ran_rxn, same, match, do_plot=false;
 	Linear_Programmer *the_lp, *ko_lp;
 	Reaction_matrix *the_matrix, *orig_matrix, *new_matrix;
     Reaction *my_react;
@@ -36,35 +36,39 @@ int main (int argc, char **argv) {
 		opt_num=string_to_int(argv[3]);
 		
 		if (argc >4) {
-			if ((argv[4][0] == '-') ||(argv[4][0] == 'Q')) {
-                if ((argv[4][1] == 'k') || (argv[4][1] == 'K')) {
-                    knockout_rxn=argv[4];
-                    knockout_rxn=knockout_rxn.substr(3, knockout_rxn.length());
-                    do_knockout=true;
-                }
-				if (argv[4][1] == 's') {
-					if ((argv[4][3]== 'd') || (argv[4][3]== 'D')) {
-						single_kd=true;
-					}
-					else {
-						single_ko=true;
-					}
-					if ((argv[4][2] == 'p') || (argv[4][2] == 'P')) 
-						single_print=true;
+            for(i=4; i<argc; i++) {
+                if ((argv[i][0] == '-') ||(argv[i][0] == 'Q')) {
+                    if ((argv[i][1] == 'k') || (argv[i][1] == 'K')) {
+                        knockout_rxn=argv[i];
+                        knockout_rxn=knockout_rxn.substr(3, knockout_rxn.length());
+                        do_knockout=true;
+                    }
+                    if (argv[i][1] == 's') {
+                        if ((argv[i][3]== 'd') || (argv[i][3]== 'D'))  single_kd=true;
+                        else  single_ko=true;
+                        
+                        outfile=argv[i];
+                        outfile=outfile.substr(5, outfile.length);
+                    }
                     
-                    outfile=argv[5];
-				}
-				if ((argv[4][1] == 'd') || (argv[4][1] == 'D')) {
-					double_kd=true;
-                  
-                    outfile=argv[5];
+                    if ((argv[i][1] == 'd') || (argv[i][1] == 'D')) {
+                        double_kd=true;
+                        
+                        outfile=argv[i];
+                        outfile=outfile.substr(5, outfile.length);
+                    }
+                    if ((argv[i][1] == 'p') || (argv[i][1] == 'P')) {
+                        do_plot=true;
+                        outplot=argv[i];
+                        outplot=outplot.substr(3, outplot.length());
+                    }
                 }
-			}
-			else {
-				limit_rxn=argv[4];
-				upper_bound=string_to_float(argv[5]);
-				extra_bound=true;
-			}
+                else {
+                    limit_rxn=argv[i];
+                    upper_bound=string_to_float(argv[i+1]);
+                    extra_bound=true;
+                }
+            }
         }
 		
 		the_matrix=new Reaction_matrix(react_file);
@@ -226,8 +230,7 @@ int main (int argc, char **argv) {
 
 						fout<<the_matrix->get_reaction(i)->react_name<<"\t"<<val[0]<<"\t"<<the_lp->get_opt_val()<<endl;
 						cout<<the_matrix->get_reaction(i)->react_name<<"\t"<<val[0]<<"\t"<<the_lp->get_opt_val()<<endl;
-						if (single_print == true)
-							the_lp->print_soln();
+                    
 					}
 					
 					(*the_matrix)=(*orig_matrix);
@@ -365,15 +368,17 @@ int main (int argc, char **argv) {
 		}
 		
 #ifdef _FBA_PLOT_
-        if (single_ko==true) do_knockout=false;
-        cout<<"PLotting: "<<do_knockout<<" amd "<<single_ko<<" with "<<non_zero_fluxes<<" reactions with flux"<<endl;
-        plot_system(flux_vals, ko_fluxes, rxn_names, non_zero_fluxes, flux_cnts, opt_rxn,   "test.ps", &ss, false,  do_knockout, single_ko);
+        if (do_plot == true) {
+            if (single_ko==true) do_knockout=false;
+            cout<<"Plotting: "<<do_knockout<<" and "<<single_ko<<" with "<<non_zero_fluxes<<" reactions with flux"<<endl;
+            plot_system(flux_vals, ko_fluxes, rxn_names, non_zero_fluxes, flux_cnts, opt_rxn,   "test.ps", &ss, false,  do_knockout, single_ko);
+        }
 #endif
 		
 		return(0);
 	}
 	else {
-        cerr<<"Usage: opt_biomass_rxn <matrix file> <boundary file> Biomass_Rxn_Name ((constrain_Rxn) (constraint val)) (-k:RxnName) (-skd)  (-sko) (-dkd)\n";
+        cerr<<"Usage: opt_biomass_rxn <matrix file> <boundary file> Biomass_Rxn_Name ((constrain_Rxn) (constraint val)) (-k:RxnName) (-skd:<output file>)  (-sko:<output file>) (-dkd:<output file>) (-p:<plotfile>)\n";
 	}
 
 }
