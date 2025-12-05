@@ -243,7 +243,7 @@ print WRITEMAKE "\n";
 
 print WRITEMAKE "%.o: %.cpp\n";
 print WRITEMAKE "\t\$(CC)  \$(OPTIONS) \$(OPTIM_SPEED)";
-if $plotlib_installed ==1) { print WRITEMAKE " -D_FBA_PLOT_ ";}
+if ($plotlib_installed ==1) { print WRITEMAKE " -D_FBA_PLOT_ ";}
 print WRITEMAKE " -c \$<\n";
 
 
